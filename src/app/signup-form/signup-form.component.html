@@ -1,0 +1,38 @@
+<form [formGroup]="form" (ngSubmit)="login()">
+   <div class="alert alert-danger" *ngIf="form.errors">
+    <!--you can also add the specific errors in here just like in before-->   
+    The username or password is invalid.</div> 
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input 
+            formControlName="username"
+            id="username" 
+            type="text" 
+            class="form-control">
+            <!--adding a loading image while the async validation happens-->
+            <div *ngIf="form.get('username').pending"  class="alert alert-primary">Checking for uniqueness...</div>
+            <div *ngIf="form.get('username').touched && form.get('username').invalid" class="alert alert-danger">
+            <!--we are going to display specific error messages for each-->
+            <div *ngIf="form.get('username').errors.required">Username is required </div>
+            <!--this is the custom validator in use that we created.-->
+            <div *ngIf="form.get('username').errors.cannotContainSpace">Username is not allowed to have spaces</div>
+            <!--this is the custom AsyncValidatorFn that we created. this shows error when as the input 'hiru' is typed-->
+            <div *ngIf="form.get('username').errors.shouldBeUnique">Username is already been taken</div>
+            <div *ngIf="form.get('username').errors.minlength">Username should be minimum 
+                {{form.get('username').errors.minlength.requiredLength}} 
+                characters but got {{form.get('username').errors.minlength.actualLength}} </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+            formControlName="password"
+            id="password" 
+            type="password" 
+            class="form-control">
+            <!--in here we have used a different approach on getting the form data by using a
+                 function to get the form data-->
+        <div class="alert alert-danger" *ngIf="password.touched && password.invalid">Password is required.</div>
+    </div>
+    <button class="btn btn-primary" type="submit">Sign Up</button>
+</form>
